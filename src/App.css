@@ -1,38 +1,89 @@
-.App {
-  text-align: center;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+html {
+  box-sizing: border-box;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+*, *::before, *::after {
+  box-sizing: inherit;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+body {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+}
+
+.camera-feed,
+.canvas-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.canvas-overlay {
+  z-index: 10;
+}
+
+.camera-container {
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.camera-feed, .canvas-overlay {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.camera-feed.user-facing {
+  transform: scaleX(-1);
+}
+
+.camera-button {
+  position: absolute;
+  font-size: 2.5rem;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  color: #fff; /* White text */
+  border: none;
+  border-radius: 50%;
+  padding: 15px;
+  width: 4.5rem;
+  cursor: pointer;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.show-settings {
+  bottom: 20px;
+  left: 20px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.switch-camera {
+  bottom: 20px;
+  right: 20px;
+}
+
+@media screen and (orientation: landscape) {
+  .switch-camera {
+    top: 20px; /* Move to top right in landscape */
+    right: 20px;
+    bottom: auto;
   }
-  to {
-    transform: rotate(360deg);
+
+  .show-settings {
+    bottom: 20px;
+    right: 20px; /* Move to bottom right in landscape */
+    left: auto;
   }
 }
