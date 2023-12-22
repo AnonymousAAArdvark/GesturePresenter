@@ -19,7 +19,6 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ onPairingCodeSubmit, onTo
           value={pairingCode}
           onChange={(e) => setPairingCode(e.target.value)}
         />
-        <button onClick={() => onPairingCodeSubmit(pairingCode)}>Submit</button>
       </div>
       <div>
         <label htmlFor="gestureSwap">Swap Gesture Directions:</label>
@@ -29,6 +28,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ onPairingCodeSubmit, onTo
           onChange={onToggleGestureSwap}
         />
       </div>
+      <button onClick={() => onPairingCodeSubmit(pairingCode)}>Submit</button>
     </div>
   );
 };
