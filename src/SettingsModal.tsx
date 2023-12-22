@@ -14,7 +14,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ onPairingCodeSubmit, onTo
 
   return (
     <div className="settings-modal">
-      <h2>GesturePresent</h2>
+      <h2>GesturePresent </h2>
       <p className="instructions">Enter your pairing code and adjust gesture settings. </p>
       <div>
         <label htmlFor="pairingCode">Pairing Code:</label>
