@@ -81,8 +81,8 @@ const Camera: React.FC<CameraProps> = ({ flipped }) => {
 
     hands.setOptions({
       modelComplexity: 1,
-      minDetectionConfidence: 0.25,
-      minTrackingConfidence: 0.25,
+      minDetectionConfidence: 0.5,
+      minTrackingConfidence: 0.5,
     });
 
     hands.onResults(onResults);
