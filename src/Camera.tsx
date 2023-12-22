@@ -69,7 +69,7 @@ const Camera: React.FC<CameraProps> = ({ flipped }) => {
         handsRef.current = null;
       }
     };
-  }, [isUserFacing]);
+  }, [isUserFacing, flipped]);
 
   const initializeMediaPipe = () => {
     if (handsRef.current) {
@@ -165,7 +165,7 @@ const Camera: React.FC<CameraProps> = ({ flipped }) => {
     <div className="camera-container">
       <canvas ref={canvasRef} className="canvas-overlay" />
       <video ref={videoRef} className={`camera-feed ${isUserFacing ? 'user-facing' : ''}`} autoPlay playsInline />
-      <button onClick={flipCamera} className="camera-button show-settings">
+      <button onClick={flipCamera} className="camera-button show-settings" >
         <FontAwesomeIcon icon={faGear} />
       </button>
       <button onClick={flipCamera} className="camera-button switch-camera">
