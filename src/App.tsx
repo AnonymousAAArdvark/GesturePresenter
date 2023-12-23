@@ -30,6 +30,7 @@ const App: React.FC = () => {
       {isModalVisible &&  <SettingsModal
         onPairingCodeSubmit={handlePairingCodeSubmit}
         onToggleGestureSwap={handleToggleGestureSwap}
+        flipped={flipped}
       />}
       <Camera flipped={flipped}/>
     </div>
