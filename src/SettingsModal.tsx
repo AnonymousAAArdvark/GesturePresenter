@@ -11,6 +11,13 @@ interface SettingsModalProps {
 const SettingsModal: React.FC<SettingsModalProps> = ({ onPairingCodeSubmit, onToggleGestureSwap, flipped }) => {
   const [pairingCode, setPairingCode] = useState('');
 
+  const handlePairingCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const input = e.target.value;
+    if (input.match(/^\d{0,4}$/)) {
+      setPairingCode(input);
+    }
+  };
+
   const isMobileSafari = () => {
     return /iP(ad|od|hone)/i.test(navigator.platform) && /Safari/i.test(navigator.userAgent) && !/CriOS/i.test(navigator.userAgent);
   };
@@ -26,9 +33,12 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ onPairingCodeSubmit, onTo
         <label htmlFor="pairingCode">Pairing Code:</label>
         <input
           id="pairingCode"
-          type="text"
+          type="tel"
+          pattern="[0-9]*"
+          inputMode="numeric"
           value={pairingCode}
-          onChange={(e) => setPairingCode(e.target.value)}
+          onChange={handlePairingCodeChange}
+          autoComplete="off"
         />
       </div>
       <label htmlFor="gestureSwap">Swap Gesture Directions:</label>
@@ -42,6 +52,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ onPairingCodeSubmit, onTo
         <input
           id="gestureSwap"
           type="checkbox"
+          checked={flipped}
           onChange={onToggleGestureSwap}
         />
         <div className="instruction-container">

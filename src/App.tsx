@@ -4,7 +4,7 @@ import SettingsModal from "./SettingsModal";
 
 const App: React.FC = () => {
   const [flipped, setFlipped] = useState(false);
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(true);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -32,7 +32,7 @@ const App: React.FC = () => {
         onToggleGestureSwap={handleToggleGestureSwap}
         flipped={flipped}
       />}
-      <Camera flipped={flipped}/>
+      <Camera flipped={flipped} onSettingsClick={showModal}/>
     </div>
   );
 };
