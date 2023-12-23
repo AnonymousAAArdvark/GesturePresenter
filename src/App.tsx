@@ -4,7 +4,7 @@ import SettingsModal from "./SettingsModal";
 
 const App: React.FC = () => {
   const [flipped, setFlipped] = useState(false);
-  const [isModalVisible, setIsModalVisible] = useState(true);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const showModal = () => {
     setIsModalVisible(true);
