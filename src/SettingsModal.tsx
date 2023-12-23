@@ -1,20 +1,72 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
+import io, { Socket } from 'socket.io-client';
 import logo from './assets/logo.png';
 import instruction from './assets/instruction.png';
+
+const SOCKET_SERVER_URL = 'http://localhost:5000';
 
 interface SettingsModalProps {
   onPairingCodeSubmit: (code: string) => void;
   onToggleGestureSwap: () => void;
   flipped: boolean;
+  pairingCode: string;
 }
 
-const SettingsModal: React.FC<SettingsModalProps> = ({ onPairingCodeSubmit, onToggleGestureSwap, flipped }) => {
-  const [pairingCode, setPairingCode] = useState('');
+interface PairingResponse {
+  status: string;
+  message?: string;
+}
 
-  const handlePairingCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+const SettingsModal: React.FC<SettingsModalProps> = ({
+   onPairingCodeSubmit,
+   onToggleGestureSwap,
+   flipped,
+   pairingCode,
+ }) => {
+  const [pairingCodeInput, setPairingCodeInput] = useState<string>(pairingCode);
+  const [socket, setSocket] = useState<Socket | null>(null);
+
+  useEffect(() => {
+    const newSocket = io(SOCKET_SERVER_URL, { transports: ['websocket'] });
+    setSocket(newSocket);
+
+    return () => {
+      newSocket.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on('paired', (data: PairingResponse) => {
+        if (data.status === 'success') {
+          console.log('Pairing successful');
+          onPairingCodeSubmit(pairingCodeInput);
+        } else {
+          console.log('Pairing failed:', data.message);
+        }
+      });
+
+      socket.on('error', (data: PairingResponse) => {
+        console.error('Pairing error:', data.message);
+      });
+
+      return () => {
+        socket.off('paired');
+        socket.off('error');
+      };
+    }
+  }, [socket, pairingCodeInput, onPairingCodeSubmit]);
+
+  const handlePairingCodeInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
     if (input.match(/^\d{0,4}$/)) {
-      setPairingCode(input);
+      setPairingCodeInput(input);
+    }
+  };
+
+  const handleSubmit = () => {
+    if (socket) {
+      socket.emit('pair', { code: pairingCodeInput });
     }
   };
 
@@ -36,8 +88,8 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ onPairingCodeSubmit, onTo
           type="tel"
           pattern="[0-9]*"
           inputMode="numeric"
-          value={pairingCode}
-          onChange={handlePairingCodeChange}
+          value={pairingCodeInput}
+          onChange={handlePairingCodeInputChange}
           autoComplete="off"
         />
       </div>
@@ -67,7 +119,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ onPairingCodeSubmit, onTo
           "<span style={{ fontSize: '.6rem' }}>A</span>A" icon on the bar,
           and then selecting the "Hide Toolbar" option.</p>
       )}
-      <button onClick={() => onPairingCodeSubmit(pairingCode)}>Submit</button>
+      <button onClick={() => handleSubmit()}>Submit</button>
     </div>
   );
 };
