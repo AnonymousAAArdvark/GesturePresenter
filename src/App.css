@@ -42,23 +42,46 @@ body {
   border-radius: 10px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   width: 80%;
-  max-width: 400px;
+  max-width: 450px;
+  max-height: 80dvh;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.title-container {
+  display: flex;
+  flex-direction: row !important;
   align-items: center;
   justify-content: center;
 }
 
-.settings-modal h2 {
+.title-container h2 {
   color: #fff;
   text-align: center;
   font-size: 1.5rem;
+  margin-right: 10px;
+}
+
+.logo {
+  width: 30px;
+  margin-bottom: 5px;
+  height: auto;
 }
 
 .instructions {
   color: #fff;
   text-align: center;
   margin-bottom: 10px;
+}
+
+.img-flip {
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+  padding-right: 0;
+  padding-left: 5px;
 }
 
 .safari-note {
@@ -92,12 +115,41 @@ body {
   color: #fff;
   font-size: 1rem;
   text-align: center;
+  margin-bottom: 10px;
+}
+
+.swap-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row !important;
+  margin: 0 !important;
+}
+
+.swap-label {
+  font-weight: bold;
+  text-align: center;
+  width: 64px;
+}
+
+.instruction-container {
+  display: flex;
+  flex-direction: row !important;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 100%;
+}
+
+.instruction-img {
+  width: 40px;
+  height: auto;
+  filter: invert();
+  padding-right: 5px;
 }
 
 .settings-modal input[type="checkbox"] {
-  width: 20px;
-  height: 20px;
-  margin-bottom: 0.5rem;
+  width: 1.75rem;
+  height: 1.75rem;
 }
 
 .settings-modal button {
