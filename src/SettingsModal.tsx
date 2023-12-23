@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
+import logo from './assets/logo.png';
+import instruction from './assets/instruction.png';
 
 interface SettingsModalProps {
   onPairingCodeSubmit: (code: string) => void;
   onToggleGestureSwap: () => void;
+  flipped: boolean;
 }
 
-const SettingsModal: React.FC<SettingsModalProps> = ({ onPairingCodeSubmit, onToggleGestureSwap }) => {
+const SettingsModal: React.FC<SettingsModalProps> = ({ onPairingCodeSubmit, onToggleGestureSwap, flipped }) => {
   const [pairingCode, setPairingCode] = useState('');
 
   const isMobileSafari = () => {
@@ -14,7 +17,10 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ onPairingCodeSubmit, onTo
 
   return (
     <div className="settings-modal">
-      <h2>GesturePresent </h2>
+      <div className="title-container">
+        <h2>GesturePresent</h2>
+        <img src={logo} alt="Logo" className="logo" />
+      </div>
       <p className="instructions">Enter your pairing code and adjust gesture settings. </p>
       <div>
         <label htmlFor="pairingCode">Pairing Code:</label>
@@ -25,17 +31,29 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ onPairingCodeSubmit, onTo
           onChange={(e) => setPairingCode(e.target.value)}
         />
       </div>
-      <div>
-        <label htmlFor="gestureSwap">Swap Gesture Directions:</label>
+      <label htmlFor="gestureSwap">Swap Gesture Directions:</label>
+      <div className="swap-container">
+        <div className="instruction-container">
+          <img src={instruction} alt="Instruction Left" className="instruction-img img-flip" />
+          <span className="swap-label" style={{ color: flipped ? '#0ab20a' : '#ff0000'}}>
+            {flipped ? 'Next' : 'Back'}
+          </span>
+        </div>
         <input
           id="gestureSwap"
           type="checkbox"
           onChange={onToggleGestureSwap}
         />
+        <div className="instruction-container">
+          <span className="swap-label" style={{ color: flipped ? '#ff0000' : '#0ab20a'}}>
+            {flipped ? 'Back' : 'Next'}
+          </span>
+          <img src={instruction} alt="Instruction Right" className="instruction-img" />
+        </div>
       </div>
       {isMobileSafari() && (
         <p className="safari-note">iOS Safari users: hide the toolbar by tapping the
-          "<span style={{ fontSize: '.5rem' }}>A</span>A" icon on the bar,
+          "<span style={{ fontSize: '.6rem' }}>A</span>A" icon on the bar,
           and then selecting the "Hide Toolbar" option.</p>
       )}
       <button onClick={() => onPairingCodeSubmit(pairingCode)}>Submit</button>
