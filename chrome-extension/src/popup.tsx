@@ -4,9 +4,21 @@ import ReactDOM from 'react-dom';
 const Popup = () => {
   const [pairingCode, setPairingCode] = useState('');
 
+  const updatePairingCode = () => {
+    chrome.storage.local.get('pairingCode', (result) => {
+      if (result.pairingCode) {
+        setPairingCode(result.pairingCode);
+      }
+    });
+  };
+
   useEffect(() => {
-    chrome.runtime.sendMessage({ type: 'getPairingCode' }, (response: React.SetStateAction<string>) => {
-      setPairingCode(response);
+    updatePairingCode();
+
+    chrome.storage.onChanged.addListener((changes, namespace) => {
+      if ('pairingCode' in changes) {
+        updatePairingCode();
+      }
     });
   }, []);
 

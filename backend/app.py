@@ -19,17 +19,22 @@ class PairingCode(db.Model):
     code = db.Column(db.String(80), unique=True, nullable=False)
     session_id = db.Column(db.String(120), unique=True, nullable=True)
     timestamp = db.Column(db.DateTime, default=db.func.current_timestamp())
+    last_heartbeat = db.Column(db.DateTime, nullable=True)
+
+
+with app.app_context():
+    db.create_all()
 
 
 def cleanup_expired_codes():
     while True:
         with app.app_context():
-            expired_time = datetime.utcnow() - timedelta(minutes=180)
-            expired_codes = PairingCode.query.filter(PairingCode.timestamp < expired_time).all()
+            expired_time = datetime.utcnow() - timedelta(minutes=10)
+            expired_codes = PairingCode.query.filter(PairingCode.last_heartbeat < expired_time).all()
             for code in expired_codes:
                 db.session.delete(code)
             db.session.commit()
-        time.sleep(3600)
+        time.sleep(1200)
 
 
 cleanup_thread = Thread(target=cleanup_expired_codes)
@@ -64,13 +69,23 @@ def handle_pairing(json):
         emit('error', {'status': 'invalid_code'}, room=request.sid)
 
 
+@socketio.on('heartbeat')
+def handle_heartbeat(json):
+    code = json.get('code')
+    pairing_code = PairingCode.query.filter_by(code=code).first()
+
+    if pairing_code:
+        pairing_code.last_heartbeat = datetime.utcnow()
+        db.session.commit()
+
+
 @app.route('/validate_code', methods=['POST'])
 def validate_code():
     data = request.json
     code = data.get('code')
-
     pairing_code = PairingCode.query.filter_by(code=code).first()
-    if pairing_code and datetime.utcnow() - pairing_code.timestamp < timedelta(minutes=180):
+    if pairing_code and pairing_code.last_heartbeat and datetime.utcnow() - pairing_code.last_heartbeat < timedelta(
+            minutes=10):
         return jsonify({'status': 'valid'})
     else:
         return jsonify({'status': 'invalid'}), 400
