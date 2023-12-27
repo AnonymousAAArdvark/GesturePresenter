@@ -19,7 +19,7 @@ class PairingCode(db.Model):
     code = db.Column(db.String(80), unique=True, nullable=False)
     session_id = db.Column(db.String(120), unique=True, nullable=True)
     timestamp = db.Column(db.DateTime, default=db.func.current_timestamp())
-    last_heartbeat = db.Column(db.DateTime, nullable=True)
+    last_heartbeat = db.Column(db.DateTime, default=db.func.current_timestamp())
 
 
 with app.app_context():
@@ -29,12 +29,20 @@ with app.app_context():
 def cleanup_expired_codes():
     while True:
         with app.app_context():
-            expired_time = datetime.utcnow() - timedelta(minutes=10)
-            expired_codes = PairingCode.query.filter(PairingCode.last_heartbeat < expired_time).all()
+            expired_time = datetime.utcnow() - timedelta(minutes=5)
+
+            expired_codes = PairingCode.query.filter(
+                db.or_(
+                    PairingCode.last_heartbeat < expired_time,
+                    PairingCode.last_heartbeat is None
+                )
+            ).all()
+
             for code in expired_codes:
                 db.session.delete(code)
             db.session.commit()
-        time.sleep(1200)
+
+        time.sleep(600)
 
 
 cleanup_thread = Thread(target=cleanup_expired_codes)
@@ -75,7 +83,8 @@ def handle_heartbeat(json):
     pairing_code = PairingCode.query.filter_by(code=code).first()
 
     if pairing_code:
-        pairing_code.last_heartbeat = datetime.utcnow()
+        now_without_ms = datetime.utcnow().replace(microsecond=0)
+        pairing_code.last_heartbeat = now_without_ms
         db.session.commit()
 
 
@@ -83,13 +92,17 @@ def handle_heartbeat(json):
 def validate_code():
     data = request.json
     code = data.get('code')
+
     pairing_code = PairingCode.query.filter_by(code=code).first()
-    if pairing_code and pairing_code.last_heartbeat and datetime.utcnow() - pairing_code.last_heartbeat < timedelta(
-            minutes=10):
-        return jsonify({'status': 'valid'})
+
+    if pairing_code and pairing_code.last_heartbeat:
+        time_since_last_heartbeat = datetime.utcnow() - pairing_code.last_heartbeat
+        if time_since_last_heartbeat < timedelta(minutes=10):
+            return jsonify({'status': 'valid'})
+        else:
+            return jsonify({'status': 'expired'}), 400
     else:
         return jsonify({'status': 'invalid'}), 400
-
 
 @app.route('/send_gesture', methods=['POST'])
 def handle_gesture():
