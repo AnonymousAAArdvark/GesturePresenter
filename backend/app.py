@@ -17,7 +17,7 @@ db = SQLAlchemy(app)
 class PairingCode(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     code = db.Column(db.String(80), unique=True, nullable=False)
-    session_id = db.Column(db.String(120), unique=True, nullable=True)
+    session_id = db.Column(db.String(120), unique=False, nullable=True)
     timestamp = db.Column(db.DateTime, default=db.func.current_timestamp())
     last_heartbeat = db.Column(db.DateTime, default=db.func.current_timestamp())
 
@@ -29,14 +29,8 @@ with app.app_context():
 def cleanup_expired_codes():
     while True:
         with app.app_context():
-            expired_time = datetime.utcnow() - timedelta(minutes=5)
-
-            expired_codes = PairingCode.query.filter(
-                db.or_(
-                    PairingCode.last_heartbeat < expired_time,
-                    PairingCode.last_heartbeat is None
-                )
-            ).all()
+            expired_time = datetime.utcnow() - timedelta(minutes=15)
+            expired_codes = PairingCode.query.filter(PairingCode.last_heartbeat < expired_time).all()
 
             for code in expired_codes:
                 db.session.delete(code)
@@ -97,7 +91,7 @@ def validate_code():
 
     if pairing_code and pairing_code.last_heartbeat:
         time_since_last_heartbeat = datetime.utcnow() - pairing_code.last_heartbeat
-        if time_since_last_heartbeat < timedelta(minutes=10):
+        if time_since_last_heartbeat < timedelta(minutes=15):
             return jsonify({'status': 'valid'})
         else:
             return jsonify({'status': 'expired'}), 400
