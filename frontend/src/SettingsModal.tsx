@@ -62,7 +62,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
   return (
     <div className="settings-modal">
       <div className="title-container">
-        <h2>GesturePresent</h2>
+        <h2>GesturePresenter</h2>
         <img src={logo} alt="Logo" className="logo" />
       </div>
       <p className="instructions">Enter your pairing code and adjust gesture settings. </p>
