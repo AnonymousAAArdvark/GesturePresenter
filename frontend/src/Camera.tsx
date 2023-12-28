@@ -33,7 +33,7 @@ const Camera: React.FC<CameraProps> = ({ pairingCode, flipped, onSettingsClick }
     const handleGestureStable = () => {
       if (gestureResult !== 0 && pairingCode !== '') {
         let gestureValue = gestureResult === 1 ? 'Right' : 'Left';
-        const url = 'http://anonymousaaardvark.pythonanywhere.com/send_gesture';
+        const url = 'https://gesture-presenter-bc9d819e6d43.herokuapp.com/send_gesture';
         console.log(pairingCode)
         axios.post(url, {
           code: pairingCode,
