@@ -40,6 +40,10 @@ const connectToSocket = () => {
   socket.on('gesture_event', (data) => {
     console.log('Gesture received:', data.gesture);
     lastGestureTime = new Date();
+
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+      chrome.tabs.sendMessage(tabs[0].id, { gesture: data.gesture });
+    });
   });
 
   socket.on('error', (data) => {

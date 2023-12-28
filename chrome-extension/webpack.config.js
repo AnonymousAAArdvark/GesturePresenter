@@ -6,6 +6,7 @@ module.exports = {
   entry: {
     index: './src/index.tsx',
     background: './src/background.ts',
+    contentScript: './src/contentScript.ts'
   },
   module: {
     rules: [
