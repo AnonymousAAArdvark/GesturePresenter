@@ -17,7 +17,7 @@ db = SQLAlchemy(app)
 class PairingCode(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     code = db.Column(db.String(80), unique=True, nullable=False)
-    session_id = db.Column(db.String(120), unique=False, nullable=True)
+    session_id = db.Column(db.String(120), unique=True, nullable=True)
     timestamp = db.Column(db.DateTime, default=db.func.current_timestamp())
     last_heartbeat = db.Column(db.DateTime, default=db.func.current_timestamp())
 
@@ -65,6 +65,9 @@ def handle_pairing(json):
 
     if pairing_code:
         pairing_code.session_id = request.sid
+
+        PairingCode.query.filter(PairingCode.session_id == request.sid, PairingCode.id != pairing_code.id).delete()
+
         db.session.commit()
         emit('paired', {'status': 'success'}, room=request.sid)
     else:

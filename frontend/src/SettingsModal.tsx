@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import logo from './assets/logo.png';
 import instruction from './assets/instruction.png';
@@ -24,6 +24,26 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
   const [pairingCodeInput, setPairingCodeInput] = useState<string>(pairingCode);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
+  useEffect(() => {
+    if (pairingCode !== '') {
+      validatePairingCode(pairingCodeInput)
+        .then(isValid => {
+          if (isValid) {
+            console.log('Pairing code is valid');
+            setErrorMessage('');
+          } else {
+            console.log('Pairing code no longer available');
+            setErrorMessage('Pairing code no longer available. Please try another code.');
+            setPairingCodeInput('');
+          }
+        })
+        .catch(error => {
+          console.error('Error validating code:', error);
+          setErrorMessage('Error validating pairing code. Please try again.');
+        });
+    }
+  }, [pairingCode]);
+
   const handlePairingCodeInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
     if (input.match(/^\d{0,4}$/)) {
@@ -39,6 +59,12 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
     } catch (error) {
       console.error('Error validating code:', error);
       return false;
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && pairingCodeInput.length === 4) {
+      handleSubmit();
     }
   };
 
@@ -76,6 +102,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
           inputMode="numeric"
           value={pairingCodeInput}
           onChange={handlePairingCodeInputChange}
+          onKeyDown={handleKeyDown}
           autoComplete="off"
         />
       </div>
