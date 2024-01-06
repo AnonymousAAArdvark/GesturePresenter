@@ -12,9 +12,10 @@ interface CameraProps {
   pairingCode: string;
   flipped: boolean;
   onSettingsClick: () => void;
+  modalVisible: boolean;
 }
 
-const Camera: React.FC<CameraProps> = ({ pairingCode, flipped, onSettingsClick }) => {
+const Camera: React.FC<CameraProps> = ({ pairingCode, flipped, onSettingsClick, modalVisible }) => {
   const [isUserFacing, setIsUserFacing] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -30,7 +31,7 @@ const Camera: React.FC<CameraProps> = ({ pairingCode, flipped, onSettingsClick }
     }
 
     const handleGestureStable = () => {
-      if (gestureResult !== 0 && pairingCode !== '') {
+      if (gestureResult !== 0 && pairingCode !== '' && !modalVisible) {
         let gestureValue = gestureResult === 1 ? 'Right' : 'Left';
         const url = 'https://gesture-presenter-bc9d819e6d43.herokuapp.com/send_gesture';
         axios.post(url, {
@@ -231,12 +232,18 @@ const Camera: React.FC<CameraProps> = ({ pairingCode, flipped, onSettingsClick }
     <div className="camera-container">
       <canvas ref={canvasRef} className="canvas-overlay" />
       <video ref={videoRef} className={`camera-feed ${isUserFacing ? 'user-facing' : ''}`} autoPlay playsInline />
-      <button onClick={onSettingsClick}  className="camera-button show-settings" >
-        <FontAwesomeIcon icon={faGear} />
-      </button>
-      <button onClick={flipCamera} className="camera-button switch-camera">
-        <FontAwesomeIcon icon={faArrowsRotate} />
-      </button>
+
+      {!modalVisible && (
+        <button onClick={onSettingsClick} className="camera-button show-settings">
+          <FontAwesomeIcon icon={faGear} />
+        </button>
+      )}
+
+      {!modalVisible && (
+        <button onClick={flipCamera} className="camera-button switch-camera">
+          <FontAwesomeIcon icon={faArrowsRotate} />
+        </button>
+      )}
     </div>
   );
 };
