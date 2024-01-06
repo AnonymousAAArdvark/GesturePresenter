@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/gesture-presenter/static/css/main.338ac23f.css",
+    "main.js": "/gesture-presenter/static/js/main.5a79bda7.js",
+    "static/js/787.213d7587.chunk.js": "/gesture-presenter/static/js/787.213d7587.chunk.js",
+    "static/media/logo.png": "/gesture-presenter/static/media/logo.c00e46ea33803e0e8d7c.png",
+    "static/media/instruction.png": "/gesture-presenter/static/media/instruction.c55f4ebf326ee93ac770.png",
+    "index.html": "/gesture-presenter/index.html",
+    "main.338ac23f.css.map": "/gesture-presenter/static/css/main.338ac23f.css.map",
+    "main.5a79bda7.js.map": "/gesture-presenter/static/js/main.5a79bda7.js.map",
+    "787.213d7587.chunk.js.map": "/gesture-presenter/static/js/787.213d7587.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.338ac23f.css",
+    "static/js/main.5a79bda7.js"
+  ]
+}
