@@ -33,8 +33,8 @@ const connectToSocket = () => {
 
   socket.on('connect', () => {
     console.log('Connected to the server');
-    startHeartbeat();
     requestNewCode();
+    startHeartbeat();
   });
 
   socket.on('gesture_event', (data) => {
@@ -84,7 +84,14 @@ chrome.runtime.onInstalled.addListener(() => {
   connectToSocket();
 });
 
+chrome.runtime.onStartup.addListener(() => {
+  connectToSocket();
+});
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (!socket || !socket.connected) {
+    connectToSocket();
+  }
   if (message.type === 'getPairingCode') {
     if (shouldRegenerateCode()) {
       requestNewCode();
