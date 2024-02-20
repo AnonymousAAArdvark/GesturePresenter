@@ -1,5 +1,10 @@
-# GesturePresenter
-Control Slides with just hand gestures!
+<h1 align="center">
+  GesturePresenter
+  <img src="https://github.com/AnonymousAAArdvark/GesturePresenter/blob/main/frontend/src/assets/logo.png" width="40" height="40" alt="GesturePresenter Logo"/>
+</h1>
+
+
+**Control Slides with just hand gestures!**
 
 GesturePresenter enables users to control slide presentations through hand gestures, utilizing any device with web access and a camera. This project leverages Google's MediaPipe Hands for gesture recognition and consists of a three-part system: a Remote website, a Chrome extension, and a backend server.
 
@@ -11,6 +16,18 @@ GesturePresenter enables users to control slide presentations through hand gestu
 - **Chrome Webstore** : https://chromewebstore.google.com/detail/gesture-presenter-remote/pdfpddkehgjilojkjcekjbfkoleclkkb
 - **Gesture Remote Website** : https://gesturepresenter.com/
 - **Backend Server on Heroku** : https://www.heroku.com
+## Screenshots
+<table>
+  <tr>
+    <td><img src="https://lh3.googleusercontent.com/o8aGS4zceshid4rtJhn4aU5qhKl5S4hkjMqN2HtFyYTzEXFmCAbAZcXKm0BjU16CAQiqUkE_uIO52Q2s5xQOenKEqQ=s1600-w1600-h1000" alt="Extension Screenshot" style="width: 100%; max-width: 600px;"/></td>
+    <td><img src="https://lh3.googleusercontent.com/tvibZs0AAzKvE0B5t39gGUcsOga47C-Fnx2nnLiaERxSFPCQX-ZdPKBR1cKI8xSgaKqrwTCwE2guPvWZT1lvbWJJEA=s1280-w1280-h800" alt="Pairing Screen Screenshot" style="width: 100%; max-width: 600px;"/></td>
+  </tr>
+  <tr>
+    <td><img src="https://lh3.googleusercontent.com/w4GUV-f_twURLcmYQqrENRvZ59GXFGGiW8wWsalwWW1Por54TbpX-o3Fwg8b1z6IJlwn8x20wTTsOkGTbCqsxlr0kw=s1600-w1600-h1000" alt="Demo Gesture Right" style="width: 100%; max-width: 600px;"/></td>
+    <td><img src="https://lh3.googleusercontent.com/I6-zaEHLxCnGiUH7n6kwBQIZCJK7ZJdxBOJ7OVX1X7XAUGQGtNGDWVJMIUlS6-Z-hppxa5P0kVaQQ3EIH5_kBVOXPw=s1600-w1600-h1000" alt="Demo Gesture Right" style="width: 100%; max-width: 600px;"/></td>
+  </tr>
+</table>
+
 ## Getting Started
 ### Prerequisites 
 - **Node.js and npm**: Required for setting up the frontend website. Download from [nodejs.org](https://nodejs.org/) , which includes npm. 
