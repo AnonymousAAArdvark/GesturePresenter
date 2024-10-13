@@ -20,42 +20,69 @@ body {
   background-color: #fff;
 }
 
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 15;
+}
+
 .settings-modal {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 20;
-  background-color: #fff;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   width: 80%;
   max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .settings-modal p {
+  color: #fff;
+  text-align: center;
   margin-bottom: 20px;
-  color: #333;
-  font-size: 1rem;
+}
+
+.settings-modal div {
+  width: 100%;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .settings-modal label {
-  display: block;
   margin-bottom: 0.5rem;
-  color: #333;
+  color: #fff;
+  font-weight: bold;
 }
 
 .settings-modal input[type="text"] {
-  width: 100%;
+  width: calc(100% - 20px); /* Adjust width considering padding */
   padding: 10px;
-  margin-bottom: 20px;
   border: 1px solid #ddd;
   border-radius: 5px;
+  background-color: rgba(51, 51, 51, 0.5);
+  color: #fff;
+  font-size: 1rem;
+  text-align: center;
 }
 
 .settings-modal input[type="checkbox"] {
-  margin-right: 10px;
+  width: 20px;
+  height: 20px;
 }
 
 .settings-modal button {
@@ -66,6 +93,8 @@ body {
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  font-size: 1rem;
+  width: 50%; /* Adjust button width */
 }
 
 .settings-modal button:hover {
