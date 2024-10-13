@@ -38,7 +38,7 @@ body {
   z-index: 20;
   background-color: rgba(0, 0, 0, 0.5);
   color: #fff;
-  padding: 20px;
+  padding: 10px;
   border-radius: 10px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   width: 80%;
@@ -49,15 +49,29 @@ body {
   justify-content: center;
 }
 
-.settings-modal p {
+.settings-modal h2 {
   color: #fff;
   text-align: center;
-  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
+
+.instructions {
+  color: #fff;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.safari-note {
+  color: #fff;
+  font-size: 0.9rem;
+  font-style: italic;
+  text-align: center;
+  margin: 10px 0;
 }
 
 .settings-modal div {
   width: 100%;
-  margin-bottom: 20px;
+  margin: 5px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -83,6 +97,7 @@ body {
 .settings-modal input[type="checkbox"] {
   width: 20px;
   height: 20px;
+  margin-bottom: 0.5rem;
 }
 
 .settings-modal button {
@@ -95,6 +110,7 @@ body {
   transition: background-color 0.3s ease;
   font-size: 1rem;
   width: 50%; /* Adjust button width */
+  margin: 10px 0;
 }
 
 .settings-modal button:hover {
