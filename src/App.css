@@ -20,6 +20,58 @@ body {
   background-color: #fff;
 }
 
+.settings-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 20;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  width: 80%;
+  max-width: 400px;
+}
+
+.settings-modal p {
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 1rem;
+}
+
+.settings-modal label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.settings-modal input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.settings-modal input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+.settings-modal button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.settings-modal button:hover {
+  background-color: #0056b3;
+}
+
 .camera-feed,
 .canvas-overlay {
   position: absolute;
