@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import axios from "axios";
 import { Hands, HAND_CONNECTIONS, Results, VERSION } from '@mediapipe/hands';
 import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils';
 import { getGesture } from './utils/GestureDetection'
@@ -8,11 +9,12 @@ import './App.css';
 
 
 interface CameraProps {
+  pairingCode: string;
   flipped: boolean;
   onSettingsClick: () => void;
 }
 
-const Camera: React.FC<CameraProps> = ({ flipped, onSettingsClick }) => {
+const Camera: React.FC<CameraProps> = ({ pairingCode, flipped, onSettingsClick }) => {
   const [isUserFacing, setIsUserFacing] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -29,7 +31,21 @@ const Camera: React.FC<CameraProps> = ({ flipped, onSettingsClick }) => {
     }
 
     const handleGestureStable = () => {
-      console.log('Gesture stable:', gestureResult);
+      if (gestureResult !== 0 && pairingCode !== '') {
+        let gestureValue = gestureResult === 1 ? 'Right' : 'Left';
+        const url = 'http://localhost:5000/send_gesture';
+        console.log(pairingCode)
+        axios.post(url, {
+          code: pairingCode,
+          gesture: gestureValue
+        })
+          .then(response => {
+            console.log('Gesture sent successfully:', response.data);
+          })
+          .catch(error => {
+            console.error('Error sending gesture:', error);
+          });
+      }
     };
 
     let secondTimeoutId: NodeJS.Timeout;
@@ -38,13 +54,11 @@ const Camera: React.FC<CameraProps> = ({ flipped, onSettingsClick }) => {
       const timeoutId = setTimeout(() => {
         handleGestureStable();
 
-        // Set the interval after the second timeout
         secondTimeoutId = setTimeout(() => {
           intervalIdRef.current = window.setInterval(handleGestureStable, 500);
         }, 250);
       }, 150);
 
-      // Cleanup function
       return () => {
         clearTimeout(timeoutId);
         if (secondTimeoutId !== undefined) {

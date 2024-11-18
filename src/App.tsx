@@ -5,6 +5,7 @@ import SettingsModal from "./SettingsModal";
 const App: React.FC = () => {
   const [flipped, setFlipped] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(true);
+  const [pairingCode, setPairingCode] = useState('');
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -16,7 +17,8 @@ const App: React.FC = () => {
 
   const handlePairingCodeSubmit = (code: string) => {
     console.log("Pairing code submitted:", code);
-    // Handle the pairing code submission logic here
+    setPairingCode(code);
+    setIsModalVisible(false);
   };
 
   const handleToggleGestureSwap = () => {
@@ -31,8 +33,13 @@ const App: React.FC = () => {
         onPairingCodeSubmit={handlePairingCodeSubmit}
         onToggleGestureSwap={handleToggleGestureSwap}
         flipped={flipped}
+        pairingCode={pairingCode}
       />}
-      <Camera flipped={flipped} onSettingsClick={showModal}/>
+      <Camera
+        pairingCode={pairingCode}
+        flipped={flipped}
+        onSettingsClick={showModal}
+      />
     </div>
   );
 };
