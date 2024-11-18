@@ -18,7 +18,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ onPairingCodeSubmit, onTo
   return (
     <div className="settings-modal">
       <div className="title-container">
-        <h2>GesturePresent</h2>
+        <h2>GesturePresenter</h2>
         <img src={logo} alt="Logo" className="logo" />
       </div>
       <p className="instructions">Enter your pairing code and adjust gesture settings. </p>
@@ -32,7 +32,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ onPairingCodeSubmit, onTo
         />
       </div>
       <label htmlFor="gestureSwap">Swap Gesture Directions:</label>
-      <div className="swap-container">
+      <div className="swap-container" onClick={onToggleGestureSwap}>
         <div className="instruction-container">
           <img src={instruction} alt="Instruction Left" className="instruction-img img-flip" />
           <span className="swap-label" style={{ color: flipped ? '#0ab20a' : '#ff0000'}}>
