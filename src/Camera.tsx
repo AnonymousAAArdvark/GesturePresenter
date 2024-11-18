@@ -9,15 +9,54 @@ import './App.css';
 
 interface CameraProps {
   flipped: boolean;
+  onSettingsClick: () => void;
 }
 
-const Camera: React.FC<CameraProps> = ({ flipped }) => {
+const Camera: React.FC<CameraProps> = ({ flipped, onSettingsClick }) => {
   const [isUserFacing, setIsUserFacing] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const handsRef = useRef<Hands | null>(null);
   const isSendingRef = useRef(false);
+  const intervalIdRef = useRef<number | undefined>(undefined);
   const [gestureResult, setGestureResult] = useState(0);
+
+  useEffect(() => {
+    // Clear any existing interval when gestureResult changes or component unmounts
+    if (intervalIdRef.current !== undefined) {
+      clearInterval(intervalIdRef.current);
+      intervalIdRef.current = undefined;
+    }
+
+    const handleGestureStable = () => {
+      console.log('Gesture stable:', gestureResult);
+    };
+
+    let secondTimeoutId: NodeJS.Timeout;
+
+    if (gestureResult !== 0) {
+      const timeoutId = setTimeout(() => {
+        handleGestureStable();
+
+        // Set the interval after the second timeout
+        secondTimeoutId = setTimeout(() => {
+          intervalIdRef.current = window.setInterval(handleGestureStable, 500);
+        }, 250);
+      }, 150);
+
+      // Cleanup function
+      return () => {
+        clearTimeout(timeoutId);
+        if (secondTimeoutId !== undefined) {
+          clearTimeout(secondTimeoutId);
+        }
+        if (intervalIdRef.current !== undefined) {
+          clearInterval(intervalIdRef.current);
+          intervalIdRef.current = undefined;
+        }
+      };
+    }
+  }, [gestureResult]);
 
   useEffect(() => {
     const getUserMedia = async () => {
@@ -178,7 +217,7 @@ const Camera: React.FC<CameraProps> = ({ flipped }) => {
     <div className="camera-container">
       <canvas ref={canvasRef} className="canvas-overlay" />
       <video ref={videoRef} className={`camera-feed ${isUserFacing ? 'user-facing' : ''}`} autoPlay playsInline />
-      <button onClick={flipCamera} className="camera-button show-settings" >
+      <button onClick={onSettingsClick}  className="camera-button show-settings" >
         <FontAwesomeIcon icon={faGear} />
       </button>
       <button onClick={flipCamera} className="camera-button switch-camera">
