@@ -122,8 +122,13 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 1px solid #ddd;
+  background-color: rgba(51, 51, 51, 0.5);
+  border-radius: 5px;
+  cursor: pointer;
   flex-direction: row !important;
-  margin: 0 !important;
+  margin: 0 0 10px 0!important;
+  width: calc(100% - 20px) !important;
 }
 
 .swap-label {

@@ -16,6 +16,7 @@ const Camera: React.FC<CameraProps> = ({ flipped }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const handsRef = useRef<Hands | null>(null);
+  const isSendingRef = useRef(false);
   const [gestureResult, setGestureResult] = useState(0);
 
   useEffect(() => {
@@ -91,8 +92,20 @@ const Camera: React.FC<CameraProps> = ({ flipped }) => {
   };
 
   const sendToMediaPipe = async () => {
+    if (isSendingRef.current) return; // Check if already sending, then return
+    isSendingRef.current = true; // Set the flag to true as it starts
+
     if (videoRef.current && handsRef.current) {
-      await handsRef.current.send({ image: videoRef.current });
+      try {
+        await handsRef.current.send({ image: videoRef.current });
+      } catch (error) {
+        console.error('Error in sendToMediaPipe:', error);
+        setTimeout(sendToMediaPipe, 500); // Wait for 500ms and retry
+      } finally {
+        isSendingRef.current = false; // Reset the flag when done or error
+      }
+    } else {
+      isSendingRef.current = false; // Reset the flag if conditions aren't met
     }
   };
 
