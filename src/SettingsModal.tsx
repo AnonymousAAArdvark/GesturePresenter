@@ -1,9 +1,7 @@
-import React, {useEffect, useState} from 'react';
-import io, { Socket } from 'socket.io-client';
+import React, { useState } from 'react';
+import axios from "axios";
 import logo from './assets/logo.png';
 import instruction from './assets/instruction.png';
-
-const SOCKET_SERVER_URL = 'http://localhost:5000';
 
 interface SettingsModalProps {
   onPairingCodeSubmit: (code: string) => void;
@@ -24,49 +22,36 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
    pairingCode,
  }) => {
   const [pairingCodeInput, setPairingCodeInput] = useState<string>(pairingCode);
-  const [socket, setSocket] = useState<Socket | null>(null);
-
-  useEffect(() => {
-    const newSocket = io(SOCKET_SERVER_URL, { transports: ['websocket'] });
-    setSocket(newSocket);
-
-    return () => {
-      newSocket.disconnect();
-    };
-  }, []);
-
-  useEffect(() => {
-    if (socket) {
-      socket.on('paired', (data: PairingResponse) => {
-        if (data.status === 'success') {
-          console.log('Pairing successful');
-          onPairingCodeSubmit(pairingCodeInput);
-        } else {
-          console.log('Pairing failed:', data.message);
-        }
-      });
-
-      socket.on('error', (data: PairingResponse) => {
-        console.error('Pairing error:', data.message);
-      });
-
-      return () => {
-        socket.off('paired');
-        socket.off('error');
-      };
-    }
-  }, [socket, pairingCodeInput, onPairingCodeSubmit]);
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const handlePairingCodeInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
     if (input.match(/^\d{0,4}$/)) {
       setPairingCodeInput(input);
+      setErrorMessage('');
     }
   };
 
-  const handleSubmit = () => {
-    if (socket) {
-      socket.emit('pair', { code: pairingCodeInput });
+  const validatePairingCode = async (code: string): Promise<boolean> => {
+    try {
+      const response = await axios.post('http://localhost:5000/validate_code', { code });
+      return response.data.status === 'valid';
+    } catch (error) {
+      console.error('Error validating code:', error);
+      return false;
+    }
+  };
+
+  const handleSubmit = async () => {
+    const isValid = await validatePairingCode(pairingCodeInput);
+    if (isValid) {
+      console.log('Pairing code is valid');
+      setErrorMessage('');
+      onPairingCodeSubmit(pairingCodeInput);
+    } else {
+      console.log('Invalid pairing code');
+      setErrorMessage('Invalid pairing code. Please try again.');
+      setPairingCodeInput('');
     }
   };
 
@@ -81,6 +66,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
         <img src={logo} alt="Logo" className="logo" />
       </div>
       <p className="instructions">Enter your pairing code and adjust gesture settings. </p>
+      {errorMessage && <div className="error-message">{errorMessage}</div>}
       <div>
         <label htmlFor="pairingCode">Pairing Code:</label>
         <input
@@ -119,7 +105,13 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
           "<span style={{ fontSize: '.6rem' }}>A</span>A" icon on the bar,
           and then selecting the "Hide Toolbar" option.</p>
       )}
-      <button onClick={() => handleSubmit()}>Submit</button>
+      <button
+        onClick={() => handleSubmit()}
+        disabled={pairingCodeInput.length !== 4}
+        className={`submit-button ${pairingCodeInput.length !== 4 ? 'disabled' : ''}`}
+      >
+        Submit
+      </button>
     </div>
   );
 };
