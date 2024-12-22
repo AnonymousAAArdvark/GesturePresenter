@@ -7,6 +7,7 @@
     "jsx": "react",
     "allowJs": true,
     "moduleResolution": "node",
+    "types": ["chrome"],
     "allowSyntheticDefaultImports": true
   },
   "include": ["src/**/*"]

@@ -5,9 +5,9 @@ const Popup = () => {
   const [pairingCode, setPairingCode] = useState('');
 
   useEffect(() => {
-    // Generate a random 4-digit code. Replace this with your actual code generation logic.
-    const code = Math.floor(1000 + Math.random() * 9000).toString();
-    setPairingCode(code);
+    chrome.runtime.sendMessage({ type: 'getPairingCode' }, (response: React.SetStateAction<string>) => {
+      setPairingCode(response);
+    });
   }, []);
 
   return (
@@ -15,7 +15,8 @@ const Popup = () => {
       <h1 style={styles.title}>Pairing Code</h1>
       <div style={styles.codeContainer}>{pairingCode}</div>
       <p style={styles.instructions}>
-        Please open <a href="https://your-placeholder-link.com" target="_blank" rel="noopener noreferrer">this link</a> on your mobile device and enter the pairing code.
+        Please open <a href="https://your-placeholder-link.com" target="_blank" rel="noopener noreferrer">
+        https://your-placeholder-link.com</a> on your mobile device and enter the pairing code.
       </p>
     </div>
   );
