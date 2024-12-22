@@ -14,6 +14,13 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///pairing_codes.db'
 db = SQLAlchemy(app)
 
 
+class PairingCode(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    code = db.Column(db.String(80), unique=True, nullable=False)
+    session_id = db.Column(db.String(120), unique=True, nullable=True)
+    timestamp = db.Column(db.DateTime, default=db.func.current_timestamp())
+
+
 def cleanup_expired_codes():
     while True:
         with app.app_context():
@@ -27,17 +34,6 @@ def cleanup_expired_codes():
 
 cleanup_thread = Thread(target=cleanup_expired_codes)
 cleanup_thread.start()
-
-
-class PairingCode(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    code = db.Column(db.String(80), unique=True, nullable=False)
-    session_id = db.Column(db.String(120), unique=True, nullable=True)
-    timestamp = db.Column(db.DateTime, default=db.func.current_timestamp())
-
-
-with app.app_context():
-    db.create_all()
 
 
 @app.route('/generate_code', methods=['GET'])
