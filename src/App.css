@@ -77,6 +77,19 @@ body {
   margin-bottom: 10px;
 }
 
+.error-message {
+  color: #ff8080;
+  background-color: rgba(255, 107, 107, 0.1);
+  border: 1px solid #ff8080;
+  padding: 8px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 0.9rem;
+  width: calc(100% - 20px) !important;
+}
+
 .safari-note {
   color: #fff;
   font-size: 0.9rem;
@@ -155,9 +168,10 @@ body {
 .settings-modal input[type="checkbox"] {
   width: 1.75rem;
   height: 1.75rem;
+  cursor: pointer;
 }
 
-.settings-modal button {
+.settings-modal .submit-button {
   background-color: #007bff;
   color: #fff;
   border: none;
@@ -168,6 +182,13 @@ body {
   font-size: 1rem;
   width: 50%;
   margin: 10px 0;
+  opacity: 1;
+}
+
+.settings-modal .submit-button.disabled {
+  background-color: #007bff;
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
 .camera-feed,
