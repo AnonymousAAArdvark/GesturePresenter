@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "GesturePresent Extension",
+  "version": "1.0",
+  "description": "A Chrome extension that allows you to control Google Slides with just hand gestures!",
+  "permissions": ["storage", "scripting"],
+  "host_permissions": [
+    "https://*/*",
+    "http://*/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
+}
