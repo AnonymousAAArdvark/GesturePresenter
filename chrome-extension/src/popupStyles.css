@@ -1,0 +1,77 @@
+.popupContainer {
+    text-align: center;
+    padding: 10px;
+    font-size: 14px;
+    font-family: 'Open Sans', sans-serif;
+    color: #333;
+    background-color: #f7f7f7;
+    width: 300px;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.title {
+    margin: 7px 0 0 0;
+    color: #4a4a4a;
+    font-size: 1.7rem;
+}
+
+.logo {
+    margin-left: 10px;
+    height: 37px;
+    width: auto;
+}
+
+.pairingCodeTitle {
+    margin: 20px 0 0 0;
+    font-weight: 400;
+    font-size: 1.25rem;
+}
+
+.codeContainer {
+    font-size: 2.25rem;
+    padding: 5px;
+    background-color: #eaeaea;
+    border-radius: 5px;
+    color: #333;
+}
+
+.instructions {
+    margin: 20px 0 0 0;
+    line-height: 1.5;
+    font-size: 15px;
+    color: #555;
+}
+
+.codeSection {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 2px 0 5px 0;
+}
+
+.refreshButton {
+    margin-left: 5px;
+    background-color: #eaeaea;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    height: 50px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.refreshButton:hover {
+    background-color: #cccccc;
+}
+
+.refreshButton:active {
+    transform: scale(0.95);
+}
