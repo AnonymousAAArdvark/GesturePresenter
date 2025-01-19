@@ -20,7 +20,9 @@ const Popup = () => {
   };
 
   useEffect(() => {
-    updatePairingCode();
+    chrome.runtime.sendMessage({ type: 'getPairingCode' }, (response) => {
+        updatePairingCode();
+    });
 
     chrome.storage.onChanged.addListener((changes, namespace) => {
       if ('pairingCode' in changes) {
@@ -32,7 +34,7 @@ const Popup = () => {
   return (
     <div className="popupContainer">
       <div className="header">
-        <h2 className="title">GesturePresent</h2>
+        <h2 className="title">GesturePresenter</h2>
         <img src={logoImg} alt="Logo" className="logo" />
       </div>
       <h3 className="pairingCodeTitle">Pairing Code</h3>

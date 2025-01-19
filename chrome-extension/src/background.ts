@@ -4,6 +4,8 @@ import io, {Socket} from 'socket.io-client';
 let socket: Socket<DefaultEventsMap, DefaultEventsMap>;
 let heartbeatInterval: number;
 let currentPairingCode: string | null = null;
+let lastHeartbeatTime: Date = new Date();
+let lastGestureTime: Date = new Date();
 
 const startHeartbeat = () => {
   if (heartbeatInterval) clearInterval(heartbeatInterval);
@@ -11,6 +13,7 @@ const startHeartbeat = () => {
   heartbeatInterval = setInterval(() => {
     if (socket && socket.connected && currentPairingCode) {
       socket.emit('heartbeat', { code: currentPairingCode });
+      lastHeartbeatTime = new Date();
       console.log("Heartbeat sent for code:", currentPairingCode);
     } else {
       clearInterval(heartbeatInterval);
@@ -18,6 +21,12 @@ const startHeartbeat = () => {
   }, 25000);
 };
 
+const shouldRegenerateCode = () => {
+  const now = new Date();
+  const fifteenMinutesAgo = new Date(now.getTime() - 15 * 60000);
+  const oneHourAgo = new Date(now.getTime() - 60 * 60000);
+  return lastHeartbeatTime < fifteenMinutesAgo || lastGestureTime < oneHourAgo;
+};
 
 const connectToSocket = () => {
   socket = io("http://localhost:5000", { transports: ['websocket'] });
@@ -30,7 +39,7 @@ const connectToSocket = () => {
 
   socket.on('gesture_event', (data) => {
     console.log('Gesture received:', data.gesture);
-    // Implement logic to simulate keypress or action based on gesture
+    lastGestureTime = new Date();
   });
 
   socket.on('error', (data) => {
@@ -43,7 +52,6 @@ const connectToSocket = () => {
   socket.on('disconnect', () => {
     console.log('Disconnected from the server');
     clearInterval(heartbeatInterval);
-    // Handle reconnection?
   });
 };
 
@@ -52,6 +60,8 @@ const requestNewCode = () => {
     .then(response => response.json())
     .then(data => {
       currentPairingCode = data.code;
+      lastHeartbeatTime = new Date();
+      lastGestureTime = new Date();
       socket.emit('pair', { code: data.code });
       chrome.storage.local.set({ pairingCode: data.code });
       console.log("New pairing code:", data.code);
@@ -65,13 +75,14 @@ chrome.runtime.onInstalled.addListener(() => {
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'getPairingCode') {
-    chrome.storage.local.get('pairingCode', (result) => {
-      sendResponse(result.pairingCode);
-    });
+    if (shouldRegenerateCode()) {
+      requestNewCode();
+    }
+    sendResponse({ status: 'codeRequested'});
     return true;
   } else if (message.type === 'requestNewCode') {
-    connectToSocket();
+    requestNewCode();
     sendResponse({ status: 'newCodeRequested' });
     return true;
   }
-})
+});
