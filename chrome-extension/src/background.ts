@@ -29,7 +29,7 @@ const shouldRegenerateCode = () => {
 };
 
 const connectToSocket = () => {
-  socket = io("http://localhost:5000", { transports: ['websocket'] });
+  socket = io("http://anonymousaaardvark.pythonanywhere.com", { transports: ['websocket'] });
 
   socket.on('connect', () => {
     console.log('Connected to the server');
@@ -60,7 +60,7 @@ const connectToSocket = () => {
 };
 
 const requestNewCode = () => {
-  fetch('http://localhost:5000/generate_code')
+  fetch('http://anonymousaaardvark.pythonanywhere.com/generate_code')
     .then(response => response.json())
     .then(data => {
       currentPairingCode = data.code;
