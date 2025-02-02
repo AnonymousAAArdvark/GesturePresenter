@@ -34,7 +34,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
 
   const validatePairingCode = async (code: string): Promise<boolean> => {
     try {
-      const response = await axios.post('http://anonymousaaardvark.pythonanywhere.com/validate_code', { code });
+      const response = await axios.post('https://gesture-presenter-bc9d819e6d43.herokuapp.com/validate_code', { code });
       return response.data.status === 'valid';
     } catch (error) {
       console.error('Error validating code:', error);

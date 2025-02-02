@@ -29,7 +29,7 @@ const shouldRegenerateCode = () => {
 };
 
 const connectToSocket = () => {
-  socket = io("http://anonymousaaardvark.pythonanywhere.com", { transports: ['websocket'] });
+  socket = io("https://gesture-presenter-bc9d819e6d43.herokuapp.com", { transports: ['websocket'] });
 
   socket.on('connect', () => {
     console.log('Connected to the server');
@@ -60,7 +60,7 @@ const connectToSocket = () => {
 };
 
 const requestNewCode = () => {
-  fetch('http://anonymousaaardvark.pythonanywhere.com/generate_code')
+  fetch('https://gesture-presenter-bc9d819e6d43.herokuapp.com/generate_code')
     .then(response => response.json())
     .then(data => {
       currentPairingCode = data.code;
