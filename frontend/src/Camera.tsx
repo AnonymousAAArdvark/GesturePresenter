@@ -77,8 +77,8 @@ const Camera: React.FC<CameraProps> = ({ pairingCode, flipped, onSettingsClick }
         const stream = await navigator.mediaDevices.getUserMedia({
           video: {
             facingMode: isUserFacing ? "user" : "environment",
-            width: { ideal: 2532 },
-            height: { ideal: 1170 }
+            width: { ideal: 500 },
+            height: { ideal: 500 }
           }
         });
         const video = videoRef.current;
@@ -136,6 +136,7 @@ const Camera: React.FC<CameraProps> = ({ pairingCode, flipped, onSettingsClick }
       modelComplexity: 1,
       minDetectionConfidence: 0.5,
       minTrackingConfidence: 0.5,
+      maxNumHands: 6,
     });
 
     hands.onResults(onResults);
@@ -197,16 +198,16 @@ const Camera: React.FC<CameraProps> = ({ pairingCode, flipped, onSettingsClick }
 
       const handStyles: { [key: string]: { connectorStyle: any, landmarkStyle: any } } = {
         'Right': {
-          connectorStyle: { color: '#00FF00', lineWidth: 5 },
-          landmarkStyle: { color: '#00FF00', lineWidth: 5 }
+          connectorStyle: { color: '#00FF00', lineWidth: 1 },
+          landmarkStyle: { color: '#00FF00', radius: 1 }
         },
         'Left': {
-          connectorStyle: { color: '#FF0000', lineWidth: 5 },
-          landmarkStyle: { color: '#FF0000', lineWidth: 5 }
+          connectorStyle: { color: '#FF0000', lineWidth: 1 },
+          landmarkStyle: { color: '#FF0000', radius: 1 }
         },
         'None': {
-          connectorStyle: { color: '#00BFFF', lineWidth: 2 },
-          landmarkStyle: { color: '#00BFFF', lineWidth: 2 }
+          connectorStyle: { color: '#00BFFF', lineWidth: .5 },
+          landmarkStyle: { color: '#00BFFF', radius: .5 }
         }
       };
 
