@@ -24,7 +24,6 @@ const Camera: React.FC<CameraProps> = ({ pairingCode, flipped, onSettingsClick }
   const [gestureResult, setGestureResult] = useState(0);
 
   useEffect(() => {
-    // Clear any existing interval when gestureResult changes or component unmounts
     if (intervalIdRef.current !== undefined) {
       clearInterval(intervalIdRef.current);
       intervalIdRef.current = undefined;
@@ -34,7 +33,6 @@ const Camera: React.FC<CameraProps> = ({ pairingCode, flipped, onSettingsClick }
       if (gestureResult !== 0 && pairingCode !== '') {
         let gestureValue = gestureResult === 1 ? 'Right' : 'Left';
         const url = 'https://gesture-presenter-bc9d819e6d43.herokuapp.com/send_gesture';
-        console.log(pairingCode)
         axios.post(url, {
           code: pairingCode,
           gesture: gestureValue
@@ -44,6 +42,7 @@ const Camera: React.FC<CameraProps> = ({ pairingCode, flipped, onSettingsClick }
           })
           .catch(error => {
             console.error('Error sending gesture:', error);
+            onSettingsClick();
           });
       }
     };
@@ -145,20 +144,20 @@ const Camera: React.FC<CameraProps> = ({ pairingCode, flipped, onSettingsClick }
   };
 
   const sendToMediaPipe = async () => {
-    if (isSendingRef.current) return; // Check if already sending, then return
-    isSendingRef.current = true; // Set the flag to true as it starts
+    if (isSendingRef.current) return;
+    isSendingRef.current = true;
 
     if (videoRef.current && handsRef.current) {
       try {
         await handsRef.current.send({ image: videoRef.current });
       } catch (error) {
         console.error('Error in sendToMediaPipe:', error);
-        setTimeout(sendToMediaPipe, 500); // Wait for 500ms and retry
+        setTimeout(sendToMediaPipe, 500);
       } finally {
-        isSendingRef.current = false; // Reset the flag when done or error
+        isSendingRef.current = false;
       }
     } else {
-      isSendingRef.current = false; // Reset the flag if conditions aren't met
+      isSendingRef.current = false;
     }
   };
 
@@ -184,7 +183,7 @@ const Camera: React.FC<CameraProps> = ({ pairingCode, flipped, onSettingsClick }
       let scaledLandmarks = landmarks.map(landmark => ({
         x: landmark.x * videoWidth,
         y: landmark.y * videoHeight,
-        z: landmark.z // Z-coordinate remains the same
+        z: landmark.z
       }));
 
       let gestureResult = getGesture(scaledLandmarks);

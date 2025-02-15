@@ -42,6 +42,11 @@ const connectToSocket = () => {
     lastGestureTime = new Date();
 
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+      if (tabs.length === 0) {
+        console.log('No active tab found');
+        return;
+      }
+
       chrome.tabs.sendMessage(tabs[0].id, { gesture: data.gesture });
     });
   });
