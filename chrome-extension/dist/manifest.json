@@ -9,7 +9,7 @@
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
-  "permissions": ["storage", "scripting", "tabs", "activeTab"],
+  "permissions": ["storage", "scripting", "tabs"],
   "content_scripts": [
     {
       "matches": ["https://docs.google.com/presentation/*"],

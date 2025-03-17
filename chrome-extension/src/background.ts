@@ -41,7 +41,9 @@ const connectToSocket = () => {
     console.log('Gesture received:', data.gesture);
     lastGestureTime = new Date();
 
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+    chrome.runtime.sendMessage({ type: 'gesture', gesture: data.gesture });
+
+    chrome.tabs.query({active: true, currentWindow: true, url: 'https://docs.google.com/presentation/*'}, function(tabs) {
       if (tabs.length === 0) {
         console.log('No active tab found');
         return;

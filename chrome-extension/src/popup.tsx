@@ -1,9 +1,45 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import logoImg from './assets/logo.png';
 import './popupStyles.css';
 
+interface GestureMessage {
+  type: string;
+  gesture?: string;
+}
+
 const Popup = () => {
   const [pairingCode, setPairingCode] = useState('');
+
+  useEffect(() => {
+    chrome.runtime.sendMessage({ type: 'getPairingCode' }, (response) => {
+      updatePairingCode();
+    });
+
+    chrome.storage.onChanged.addListener((changes, namespace) => {
+      if ('pairingCode' in changes) {
+        updatePairingCode();
+      }
+    });
+
+    const handleGestureMessage = (
+      message: GestureMessage,
+      sender: chrome.runtime.MessageSender,
+      sendResponse: (response?: any) => void
+    ) => {
+      if (message.type === 'gesture') {
+        document.body.style.backgroundColor = message.gesture === 'Left' ? '#FFC1C1' : '#98FB98';
+        setTimeout(() => {
+          document.body.style.backgroundColor = 'white';
+        }, 500);
+      }
+    };
+
+    chrome.runtime.onMessage.addListener(handleGestureMessage);
+
+    return () => {
+      chrome.runtime.onMessage.removeListener(handleGestureMessage);
+    };
+  }, []);
 
   const updatePairingCode = () => {
     chrome.storage.local.get('pairingCode', (result) => {
@@ -18,18 +54,6 @@ const Popup = () => {
       console.log(response.status);
     });
   };
-
-  useEffect(() => {
-    chrome.runtime.sendMessage({ type: 'getPairingCode' }, (response) => {
-        updatePairingCode();
-    });
-
-    chrome.storage.onChanged.addListener((changes, namespace) => {
-      if ('pairingCode' in changes) {
-        updatePairingCode();
-      }
-    });
-  }, []);
 
   return (
     <div className="popupContainer">
@@ -55,7 +79,7 @@ const Popup = () => {
       </div>
       <p className="instructions">
         Please open <a href="https://your-placeholder-link.com" target="_blank" rel="noopener noreferrer">
-        https://your-placeholder-link.com</a> on your mobile device and enter the code.
+        your-placeholder-link.com</a> on your mobile device and enter the code.
       </p>
     </div>
   );
