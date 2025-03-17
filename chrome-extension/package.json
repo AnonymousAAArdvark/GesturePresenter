@@ -1,5 +1,5 @@
 {
-  "name": "gesture-present-extension",
+  "name": "gesture-presenter-extension",
   "version": "1.0.0",
   "description": "Control Google Slides With Just Your Hand Gestures!",
   "main": "background.js",

@@ -1,5 +1,5 @@
 {
-  "name": "gesture-present-frontend",
+  "name": "gesture-presenter-frontend",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -53,5 +53,5 @@
   "devDependencies": {
     "gh-pages": "^6.1.1"
   },
-  "homepage": "https://anonymousaaardvark.github.io/gesture-presenter"
+  "homepage": "https://anonymousaaardvark.github.io/GesturePresenter"
 }
