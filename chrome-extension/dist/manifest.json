@@ -16,10 +16,6 @@
       "js": ["js/contentScript.js"]
     }
   ],
-  "host_permissions": [
-    "https://*/*",
-    "http://*/*"
-  ],
   "background": {
     "service_worker": "js/background.js"
   },
