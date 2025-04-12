@@ -78,8 +78,9 @@ const Popup = () => {
         </button>
       </div>
       <p className="instructions">
-        Please open <a href="https://anonymousaaardvark.github.io/GesturePresenter/" target="_blank" rel="noopener noreferrer">
-        anonymousaaardvark.github.io/GesturePresenter</a> on your mobile device and enter the code.
+        Please open <br/><a href="https://anonymousaaardvark.github.io/GesturePresenter/" target="_blank" rel="noopener noreferrer">
+        https://anonymousaaardvark.github.io
+        /GesturePresenter<br/></a> on your mobile device and enter the code.
       </p>
     </div>
   );
