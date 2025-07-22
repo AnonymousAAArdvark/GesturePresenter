@@ -3,6 +3,9 @@
   <img src="https://github.com/AnonymousAAArdvark/GesturePresenter/blob/main/frontend/src/assets/logo.png" width="40" height="40" alt="GesturePresenter Logo"/>
 </h1>
 
+![Build Passing](https://img.shields.io/badge/build-passing-brightgreen)
+![Website](https://img.shields.io/website?url=https%3A%2F%2Fgesturepresenter.com)
+![Chrome Web Store Stars](https://img.shields.io/chrome-web-store/stars/pdfpddkehgjilojkjcekjbfkoleclkkb)
 
 **Control Slides with just hand gestures!**
 
